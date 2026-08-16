@@ -1,5 +1,3 @@
-const articles = [];
-
 export default function Writing() {
   return (
     <main className="min-h-screen bg-white text-neutral-900">
@@ -15,10 +13,6 @@ export default function Writing() {
           </a>
 
           <div className="flex gap-5 text-sm text-neutral-500">
-            <a href="/writing" className="text-black">
-              Writing
-            </a>
-
             <a href="/research" className="hover:text-black">
               Research
             </a>
@@ -29,54 +23,17 @@ export default function Writing() {
           </div>
         </nav>
 
-        {/* Introduction */}
-        <section className="mb-16">
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">
+        {/* Header */}
+        <section>
+          <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl">
             Writing
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-neutral-600">
-            Essays and notes.
+          <p className="mt-8 max-w-2xl text-lg leading-8 text-neutral-600">
+            Essays, notes, and things I&apos;ve written about technology,
+            markets, data, and the ideas shaping the future.
           </p>
         </section>
-
-        {/* Articles */}
-        <section className="border-t border-neutral-200">
-          {articles.map((article) => (
-            <a
-              key={article.title}
-              href={article.href}
-              className="group block border-b border-neutral-200 py-8"
-            >
-              <div className="flex items-start justify-between gap-8">
-
-                <div className="max-w-2xl">
-                  <h2 className="text-xl font-medium tracking-tight group-hover:underline">
-                    {article.title}
-                  </h2>
-
-                  <p className="mt-3 text-sm leading-6 text-neutral-500">
-                    {article.description}
-                  </p>
-
-                  <p className="mt-4 text-xs text-neutral-400">
-                    {article.date}
-                  </p>
-                </div>
-
-                <span className="mt-1 text-neutral-400 transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-
-              </div>
-            </a>
-          ))}
-        </section>
-
-        {/* Footer */}
-        <footer className="mt-24 text-sm text-neutral-400">
-          © {new Date().getFullYear()} Etimfon
-        </footer>
 
       </div>
     </main>
