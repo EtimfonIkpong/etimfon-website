@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Etimfon",
-  description: "I write, research, and build.",
+  title: "Etimfon Ikpong",
+  description:
+    "I write, research, and build.",
+  icons: {
+    icon: "/favicon.jpg",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
