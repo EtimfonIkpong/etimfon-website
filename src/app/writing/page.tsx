@@ -1,40 +1,66 @@
-export default function Writing() {
+import { client } from "@/sanity/lib/client";
+
+const postsQuery = `*[
+  _type == "post" &&
+  defined(slug.current) &&
+  defined(publishedAt) &&
+  publishedAt <= now()
+] | order(publishedAt desc) {
+  title,
+  description,
+  "slug": slug.current,
+  publishedAt
+}`;
+
+type Post = {
+  title: string;
+  description?: string;
+  slug: string;
+  publishedAt: string;
+};
+
+export default async function Writing() {
+  const posts = await client.fetch<Post[]>(postsQuery);
+
   return (
     <main className="min-h-screen bg-white text-neutral-900">
       <div className="mx-auto max-w-3xl px-6 py-16 sm:px-8 sm:py-24">
-
-        {/* Navigation */}
         <nav className="mb-24 flex items-center justify-between">
           <a
             href="/"
             className="text-sm text-neutral-500 hover:text-black"
           >
-            ← Home
+            ← Back
           </a>
-
-          <div className="flex gap-5 text-sm text-neutral-500">
-            <a href="/research" className="hover:text-black">
-              Research
-            </a>
-
-            <a href="/books" className="hover:text-black">
-              Books
-            </a>
-          </div>
         </nav>
 
-        {/* Header */}
-        <section>
-          <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl">
-            Writing
-          </h1>
+        <h1 className="mb-12 text-3xl font-medium">Writing</h1>
 
-          <p className="mt-8 max-w-2xl text-lg leading-8 text-neutral-600">
-            Essays, notes, and things I&apos;ve written about technology,
-            markets, data, and the ideas shaping the future.
-          </p>
-        </section>
+        <div className="space-y-10">
+          {posts.map((post) => (
+            <article key={post.slug}>
+              <a href={`/writing/${post.slug}`} className="group">
+                <h2 className="text-xl font-medium group-hover:underline">
+                  {post.title}
+                </h2>
 
+                {post.description && (
+                  <p className="mt-2 text-neutral-600">
+                    {post.description}
+                  </p>
+                )}
+
+                <p className="mt-3 text-sm text-neutral-400">
+                  {new Date(post.publishedAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              </a>
+            </article>
+          ))}
+        </div>
       </div>
     </main>
   );
