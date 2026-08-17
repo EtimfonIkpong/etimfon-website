@@ -1,5 +1,6 @@
 import { PortableText } from "@portabletext/react";
 import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
 
 const postQuery = `*[
   _type == "post" &&
@@ -8,10 +9,11 @@ const postQuery = `*[
   publishedAt <= now()
 ][0]{
   title,
-  description,
-  publishedAt,
-  body,
-  "slug": slug.current
+description,
+publishedAt,
+body,
+mainImage,
+"slug": slug.current
 }`;
 
 type Post = {
@@ -20,7 +22,60 @@ type Post = {
   publishedAt: string;
   slug: string;
   body: any[];
+  mainImage?: {
+    asset?: {
+      _ref: string;
+    };
+  };
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const post = await client.fetch<Post | null>(postQuery, { slug });
+
+  if (!post) {
+    return {
+      title: "Article not found",
+    };
+  }
+
+  const imageUrl = post.mainImage
+    ? urlFor(post.mainImage).width(1200).height(630).url()
+    : undefined;
+
+  return {
+    title: post.title,
+    description: post.description,
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      type: "article",
+      ...(imageUrl && {
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ],
+      }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      ...(imageUrl && {
+        images: [imageUrl],
+      }),
+    },
+  };
+}
 
 export default async function ArticlePage({
   params,
