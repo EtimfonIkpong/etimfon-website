@@ -16,9 +16,6 @@ export const metadata: Metadata = {
   title: "Etimfon Ikpong",
   description:
     "I write, research, and build.",
-  icons: {
-    icon: "/favicon.jpg",
-  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
