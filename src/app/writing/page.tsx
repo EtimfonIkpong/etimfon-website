@@ -1,5 +1,5 @@
 import { client } from "@/sanity/lib/client";
-
+export const dynamic = "force-dynamic";
 const postsQuery = `*[
   _type == "post" &&
   defined(slug.current) &&
